@@ -12,6 +12,7 @@ import {
   CircleDollarSign,
   LayoutDashboard,
   Menu,
+  X,
   Search,
   Settings,
   Star,
@@ -95,6 +96,7 @@ function App() {
 
   const [search, setSearch] = useState("");
   const [activeTab, setActiveTab] = useState("Overview");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [selectedCoin, setSelectedCoin] = useState("bitcoin");
   const [quantityInputs, setQuantityInputs] = useState<Record<string, string>>({});
   const [purchaseInputs, setPurchaseInputs] = useState<Record<string, string>>({});
@@ -196,12 +198,22 @@ function App() {
   const totalReturn =
     totalInvested > 0 ? (totalProfit / totalInvested) * 100 : null;
 
+  const closeMobileMenu = () => setMobileMenuOpen(false);
+
   return (
     <div className="app-shell">
-      <aside className="sidebar">
+      <aside className={`sidebar ${mobileMenuOpen ? "sidebar-open" : ""}`}>
         <div className="brand">
           <div className="brand-icon"><Activity size={23} /></div>
           <span>Crypto<span className="brand-accent">Pulse</span></span>
+          <button
+            className="mobile-close-button"
+            type="button"
+            aria-label="Close navigation menu"
+            onClick={closeMobileMenu}
+          >
+            <X size={21} />
+          </button>
         </div>
 
         <p className="nav-label">WORKSPACE</p>
@@ -215,11 +227,16 @@ function App() {
           <button
             className={`nav-link ${activeTab === label ? "active" : ""}`}
             key={label}
-            onClick={() => setActiveTab(label)}
+            onClick={() => {
+              setActiveTab(label);
+              closeMobileMenu();
+            }}
           >
             <Icon size={18} />
             <span>{label}</span>
-            {label === "Watchlist" && <span className="nav-count">{watchlist.length}</span>}
+            {label === "Watchlist" && (
+              <span className="nav-count">{watchlist.length}</span>
+            )}
           </button>
         ))}
 
@@ -233,8 +250,15 @@ function App() {
             </button>
           </div>
 
-          <button className="nav-link" onClick={() => setActiveTab("Settings")}>
-            <Settings size={18} /><span>Settings</span>
+          <button
+            className={`nav-link ${activeTab === "Settings" ? "active" : ""}`}
+            onClick={() => {
+              setActiveTab("Settings");
+              closeMobileMenu();
+            }}
+          >
+            <Settings size={18} />
+            <span>Settings</span>
           </button>
 
           <div className="profile">
@@ -245,10 +269,30 @@ function App() {
         </div>
       </aside>
 
+      {mobileMenuOpen && (
+        <button
+          type="button"
+          className="sidebar-overlay"
+          aria-label="Close navigation menu"
+          onClick={closeMobileMenu}
+        />
+      )}
+
       <main className="main-content">
         <header className="topbar">
-          <div className="mobile-brand"><Menu size={20} /> CryptoPulse</div>
+          <button
+            className="mobile-brand"
+            type="button"
+            aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={mobileMenuOpen}
+            onClick={() => setMobileMenuOpen((open) => !open)}
+          >
+            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            <span>CryptoPulse</span>
+          </button>
+
           <div className="breadcrumb">Workspace <span>/</span> {activeTab}</div>
+
           <div className="top-actions">
             <span className={`connection ${connected ? "online" : ""}`}>
               <span className="status-dot" />

@@ -1262,4 +1262,77 @@ tbody tr:hover {
   }
 }
 
+/* Mobile sidebar navigation */
+.mobile-brand {
+  cursor: pointer;
+}
+
+.mobile-close-button {
+  display: none;
+}
+
+.sidebar-overlay {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: min(280px, 85vw);
+    height: 100vh;
+    height: 100dvh;
+    z-index: 1001;
+    overflow-y: auto;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+  }
+
+  .sidebar.sidebar-open {
+    transform: translateX(0);
+  }
+
+  .mobile-close-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    border: none;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .sidebar-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    padding: 0;
+    background: rgba(15, 23, 42, 0.55);
+    z-index: 1000;
+    cursor: pointer;
+  }
+
+  .mobile-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: none;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+  }
+
+  .main-content {
+    width: 100%;
+    min-width: 0;
+    margin-left: 0;
+  }
+}
+
 
